@@ -1,0 +1,29 @@
+.bg{
+    background-color: black;
+    color: whitesmoke;
+    font-size: 24px;
+    font-weight: 500;
+    text-align: center;
+}
+.bg li{
+    display: inline-block;
+    padding: 20px;
+    cursor: pointer;
+}
+.bg li a{
+    text-decoration: none;
+    color: whitesmoke;
+}
+.reg{
+    margin-top: 100px;
+}
+#btn{
+    background-color: black;
+    color: whitesmoke;
+    border-radius: 100px;
+    width: 500px;
+    border: none;
+}
+.reg form input,select{
+    width: 500px;
+}
