@@ -1,25 +1,42 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const View = () => {
     const [data, setData] = useState([''])
-    const [refresh,setRefresh]=useState(false)
+    const [refresh, setRefresh] = useState(false)
+    const navigate=useNavigate()
+    let token = localStorage.getItem('token')
+    console.log(token);
 
     useEffect(() => {
         let fetchdata = async () => {
-            let response = await axios.get('http://localhost:4001/find')
-            console.log(response.data);
-            setData(response.data)
+            try {
+                let response = await axios.get('http://localhost:4001/find', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+                console.log(response.data);
+                setData(response.data)
+            } catch (e) {
+                console.log(e.response.data.message);
+                navigate('/login')
+            }
         }
-        fetchdata()
+        if (token==null) {
+            navigate('/login')
+        }
+        else{
+            fetchdata()
+        }
     }, [refresh])
     console.log(data);
 
-    const handleDelete=async (id)=>{
+    const handleDelete = async (id) => {
         console.log(id);
         setRefresh(!refresh)
-        let response=await axios.delete(`http://localhost:4001/delete/${id}`)
+        let response = await axios.delete(`http://localhost:4001/delete/${id}`)
         console.log(response);
     }
 
@@ -27,7 +44,7 @@ const View = () => {
         <div className='d-flex gap-3 m-5 flex-wrap '>
 
             {data.map((item) => (
-                <div style={{backgroundColor:'#3f8ffb', color:'whitesmoke', padding:'15px'}}>
+                <div style={{ backgroundColor: '#3f8ffb', color: 'whitesmoke', padding: '15px' }}>
                     <p>Username : {item.username}</p>
                     <p>Password : {item.password}</p>
                     <p>Fullname : {item.fullname}</p>
@@ -35,7 +52,7 @@ const View = () => {
                     <p>User Type : {item.dropdown}</p>
                     <p>User Id : {item._id}</p>
                     <Link to={`/update/${item._id}`}><button>Update</button></Link>
-                    <button onClick={()=>{handleDelete(item._id)}}>Delete</button>
+                    <button onClick={() => { handleDelete(item._id) }}>Delete</button>
                 </div>
             ))}
 

@@ -19,12 +19,16 @@ export const Login = () => {
     try {
       let response = await axios.post('http://localhost:4001/loginOne', data)
       console.log(response.data);
+      const token=response.data.token;
+      console.log(token);
+      localStorage.setItem('token',token)
+      localStorage.setItem('id',response.data.user._id)
 
       if (response.data) {
         console.log('success');
         toast.success('Login success')
-        navigate(`/viewlogin/${response.data._id}`)
-        // navigate(`/viewlogin`)
+        // navigate(`/viewlogin/${response.data._id}`)
+        navigate('/view')
       }
       else {
         toast.error('Login Failed')
